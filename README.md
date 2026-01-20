@@ -76,7 +76,7 @@ multi-cloud-storage-provider/
 
 ## Requirements
 
-- Python 3.7+
+- Python 3.8+
 - pytest (for running tests)
 
 ## Installation
