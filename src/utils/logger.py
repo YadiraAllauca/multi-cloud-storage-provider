@@ -12,5 +12,7 @@ def get_logger(name: str) -> logging.Logger:
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
+        # Without this, a host application that configures the root logger gets
+        # every message twice: once from our handler, once from the root's.
+        logger.propagate = False
     return logger
-

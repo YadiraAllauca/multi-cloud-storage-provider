@@ -2,10 +2,9 @@ class StorageOperationError(Exception):
     pass
 
 
-class FileNotFoundError(StorageOperationError):
+class StorageFileNotFoundError(StorageOperationError):
     pass
 
 
 class InvalidPathError(StorageOperationError):
     pass
-

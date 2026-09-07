@@ -1,10 +1,16 @@
-from pathlib import Path
 from src.interfaces.file_downloader import IFileDownloader
 from src.utils.logger import get_logger
-from src.exceptions import FileNotFoundError, InvalidPathError, StorageOperationError
+from src.utils.cloud_uri import validate_cloud_uri
+from src.exceptions import StorageFileNotFoundError, InvalidPathError, StorageOperationError
 
 
 class S3Downloader(IFileDownloader):
+    """Mock S3 downloader: validates inputs and logs. It does NOT talk to AWS.
+
+    No destination directory is created and no file is written, so a caller is
+    never left with an empty directory tree that looks like a real download.
+    """
+
     def __init__(self, aws_access_key: str = None, aws_secret_key: str = None, region: str = None):
         self._logger = get_logger(self.__class__.__name__)
         self._aws_access_key = aws_access_key
@@ -13,19 +19,17 @@ class S3Downloader(IFileDownloader):
 
     def download(self, source: str, destination: str) -> bool:
         try:
-            if not source.startswith("s3://"):
-                raise InvalidPathError(f"Invalid S3 source format: {source}")
+            bucket, object_key = validate_cloud_uri(source, "s3")
 
-            dest_path = Path(destination)
-            dest_path.parent.mkdir(parents=True, exist_ok=True)
+            if not destination:
+                raise InvalidPathError("Destination path must not be empty")
 
-            self._logger.info(f"Downloading {source} from S3 to {destination}")
-            self._logger.warning("S3Downloader is a mock implementation. Real S3 integration requires boto3.")
+            self._logger.info(f"Downloading '{object_key}' from S3 bucket '{bucket}' to {destination}")
+            self._logger.warning(f"S3Downloader is a mock: {destination} was NOT written.")
             return True
 
-        except (FileNotFoundError, InvalidPathError):
+        except (StorageFileNotFoundError, InvalidPathError):
             raise
         except Exception as e:
             self._logger.error(f"Failed to download {source} to {destination}: {str(e)}")
             raise StorageOperationError(f"Download failed: {str(e)}") from e
-

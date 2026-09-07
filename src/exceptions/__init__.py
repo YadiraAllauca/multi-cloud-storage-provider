@@ -1,8 +1,7 @@
 from .storage_exceptions import (
-    FileNotFoundError,
+    StorageFileNotFoundError,
     StorageOperationError,
     InvalidPathError
 )
 
-__all__ = ['FileNotFoundError', 'StorageOperationError', 'InvalidPathError']
-
+__all__ = ['StorageFileNotFoundError', 'StorageOperationError', 'InvalidPathError']

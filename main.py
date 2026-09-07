@@ -6,9 +6,10 @@ from src.exceptions import StorageOperationError
 
 
 def main():
-    print("=== Multi-Cloud Storage Provider Demo ===\n")
+    print("=== Multi-Cloud Storage Provider Demo ===")
+    print("Only local disk performs real I/O. S3 and GCS validate and log only.\n")
     
-    print("1. Testing Amazon S3 Storage (Mock)")
+    print("1. Amazon S3 (mock: validates and logs, writes nothing)")
     factory = AmazonStorageFactory()
     service = ServiceRunner(factory)
     
@@ -23,7 +24,7 @@ def main():
     except StorageOperationError as e:
         print(f"Error: {e}")
     
-    print("\n2. Testing Local Disk Storage (Real Implementation)")
+    print("\n2. Local disk (real: copies files with shutil.copy2)")
     factory = LocalDiskStorageFactory()
     service = ServiceRunner(factory)
     
@@ -43,7 +44,7 @@ def main():
     except StorageOperationError as e:
         print(f"Error: {e}")
     
-    print("\n3. Testing Google Cloud Storage (Mock)")
+    print("\n3. Google Cloud Storage (mock: validates and logs, writes nothing)")
     factory = GoogleStorageFactory()
     service = ServiceRunner(factory)
     

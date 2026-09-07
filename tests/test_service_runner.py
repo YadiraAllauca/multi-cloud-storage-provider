@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 from src.factories import LocalDiskStorageFactory, AmazonStorageFactory
 from src.client import ServiceRunner
-from src.exceptions import FileNotFoundError
+from src.exceptions import StorageFileNotFoundError
 
 
 class TestServiceRunner:
@@ -50,6 +50,6 @@ class TestServiceRunner:
         factory = LocalDiskStorageFactory()
         service = ServiceRunner(factory)
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(StorageFileNotFoundError):
             service.upload_file("/nonexistent/file.txt", "/tmp/dest.txt")
 

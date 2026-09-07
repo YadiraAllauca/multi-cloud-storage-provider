@@ -2,7 +2,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from src.products.local.disk_uploader import DiskUploader
-from src.exceptions import FileNotFoundError, InvalidPathError
+from src.exceptions import StorageFileNotFoundError, InvalidPathError
 
 
 class TestDiskUploader:
@@ -23,7 +23,7 @@ class TestDiskUploader:
     def test_upload_file_not_found(self):
         uploader = DiskUploader()
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(StorageFileNotFoundError):
             uploader.upload("/nonexistent/file.txt", "/tmp/dest.txt")
 
     def test_upload_invalid_source_path(self):
@@ -36,3 +36,15 @@ class TestDiskUploader:
             with pytest.raises(InvalidPathError):
                 uploader.upload(str(source_dir), "/tmp/dest.txt")
 
+
+    def test_upload_to_same_path_raises_invalid_path(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_file = Path(tmpdir) / "test.txt"
+            source_file.write_text("test content")
+
+            uploader = DiskUploader()
+
+            with pytest.raises(InvalidPathError):
+                uploader.upload(str(source_file), str(source_file))
+
+            assert source_file.read_text() == "test content"
