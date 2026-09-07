@@ -1,7 +1,8 @@
+from typing import Optional
 from src.interfaces.file_downloader import IFileDownloader
 from src.utils.logger import get_logger
 from src.utils.cloud_uri import validate_cloud_uri
-from src.exceptions import StorageFileNotFoundError, InvalidPathError, StorageOperationError
+from src.exceptions import InvalidPathError, StorageOperationError
 
 
 class S3Downloader(IFileDownloader):
@@ -11,7 +12,12 @@ class S3Downloader(IFileDownloader):
     never left with an empty directory tree that looks like a real download.
     """
 
-    def __init__(self, aws_access_key: str = None, aws_secret_key: str = None, region: str = None):
+    def __init__(
+        self,
+        aws_access_key: Optional[str] = None,
+        aws_secret_key: Optional[str] = None,
+        region: Optional[str] = None,
+    ):
         self._logger = get_logger(self.__class__.__name__)
         self._aws_access_key = aws_access_key
         self._aws_secret_key = aws_secret_key
@@ -24,11 +30,13 @@ class S3Downloader(IFileDownloader):
             if not destination:
                 raise InvalidPathError("Destination path must not be empty")
 
-            self._logger.info(f"Downloading '{object_key}' from S3 bucket '{bucket}' to {destination}")
+            self._logger.info(
+                f"Downloading '{object_key}' from S3 bucket '{bucket}' to {destination}"
+            )
             self._logger.warning(f"S3Downloader is a mock: {destination} was NOT written.")
             return True
 
-        except (StorageFileNotFoundError, InvalidPathError):
+        except StorageOperationError:
             raise
         except Exception as e:
             self._logger.error(f"Failed to download {source} to {destination}: {str(e)}")

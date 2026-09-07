@@ -1,3 +1,4 @@
+from typing import Optional
 from pathlib import Path
 from src.interfaces.file_uploader import IFileUploader
 from src.utils.logger import get_logger
@@ -8,7 +9,12 @@ from src.exceptions import StorageFileNotFoundError, InvalidPathError, StorageOp
 class S3Uploader(IFileUploader):
     """Mock S3 uploader: validates inputs and logs. It does NOT talk to AWS."""
 
-    def __init__(self, aws_access_key: str = None, aws_secret_key: str = None, region: str = None):
+    def __init__(
+        self,
+        aws_access_key: Optional[str] = None,
+        aws_secret_key: Optional[str] = None,
+        region: Optional[str] = None,
+    ):
         self._logger = get_logger(self.__class__.__name__)
         self._aws_access_key = aws_access_key
         self._aws_secret_key = aws_secret_key
@@ -28,7 +34,7 @@ class S3Uploader(IFileUploader):
             self._logger.warning("S3Uploader is a mock: no bytes were sent to AWS.")
             return True
 
-        except (StorageFileNotFoundError, InvalidPathError):
+        except StorageOperationError:
             raise
         except Exception as e:
             self._logger.error(f"Failed to upload {file_path} to {destination}: {str(e)}")

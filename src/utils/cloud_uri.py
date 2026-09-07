@@ -1,7 +1,7 @@
 from src.exceptions import InvalidPathError
 
 
-def validate_cloud_uri(uri: str, scheme: str) -> tuple:
+def validate_cloud_uri(uri: str, scheme: str) -> tuple[str, str]:
     """Validate a `<scheme>://bucket/object` URI and return (bucket, object_key).
 
     Raises InvalidPathError if the scheme is wrong, the bucket is missing, or

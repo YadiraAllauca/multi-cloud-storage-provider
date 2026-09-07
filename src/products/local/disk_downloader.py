@@ -32,7 +32,7 @@ class DiskDownloader(IFileDownloader):
             self._logger.info(f"Successfully copied {source} to {destination}")
             return True
 
-        except (StorageFileNotFoundError, InvalidPathError):
+        except StorageOperationError:
             raise
         except Exception as e:
             self._logger.error(f"Failed to download {source} to {destination}: {str(e)}")

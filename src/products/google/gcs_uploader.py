@@ -1,3 +1,4 @@
+from typing import Optional
 from pathlib import Path
 from src.interfaces.file_uploader import IFileUploader
 from src.utils.logger import get_logger
@@ -8,7 +9,7 @@ from src.exceptions import StorageFileNotFoundError, InvalidPathError, StorageOp
 class GCSUploader(IFileUploader):
     """Mock GCS uploader: validates inputs and logs. It does NOT talk to Google Cloud."""
 
-    def __init__(self, project_id: str = None, credentials_path: str = None):
+    def __init__(self, project_id: Optional[str] = None, credentials_path: Optional[str] = None):
         self._logger = get_logger(self.__class__.__name__)
         self._project_id = project_id
         self._credentials_path = credentials_path
@@ -27,7 +28,7 @@ class GCSUploader(IFileUploader):
             self._logger.warning("GCSUploader is a mock: no bytes were sent to Google Cloud.")
             return True
 
-        except (StorageFileNotFoundError, InvalidPathError):
+        except StorageOperationError:
             raise
         except Exception as e:
             self._logger.error(f"Failed to upload {file_path} to {destination}: {str(e)}")

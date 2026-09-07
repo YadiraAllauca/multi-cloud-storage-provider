@@ -32,7 +32,7 @@ class DiskUploader(IFileUploader):
             self._logger.info(f"Successfully copied {file_path} to {destination}")
             return True
 
-        except (StorageFileNotFoundError, InvalidPathError):
+        except StorageOperationError:
             raise
         except Exception as e:
             self._logger.error(f"Failed to upload {file_path} to {destination}: {str(e)}")

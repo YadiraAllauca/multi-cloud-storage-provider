@@ -1,10 +1,12 @@
 name: CI
 
 on:
+  # Both branches on purpose: the default branch is being renamed master -> main.
+  # Drop 'master' once the rename has landed on GitHub.
   push:
-    branches: [ master ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ master ]
+    branches: [ main, master ]
 
 jobs:
   test:
