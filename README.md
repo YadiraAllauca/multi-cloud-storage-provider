@@ -231,9 +231,7 @@ Coverage sits around 90% of `src/`, but read that number in context: two thirds 
 are mocks, so high coverage here means "the validation and wiring are exercised", not "cloud
 uploads work".
 
-CI runs the suite on Python 3.9 through 3.13 on every push and pull request to the default
-branch. The workflow currently listens on both `main` and `master` while the branch is being
-renamed; `master` comes out of `ci.yml` once the rename lands.
+CI runs the suite on Python 3.9 through 3.13 on every push and pull request to `main`.
 
 ## Adding a provider
 
