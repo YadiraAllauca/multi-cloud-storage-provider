@@ -1,4 +1,3 @@
-import pytest
 from src.factories import AmazonStorageFactory, LocalDiskStorageFactory
 from src.products.amazon.s3_uploader import S3Uploader
 from src.products.amazon.s3_downloader import S3Downloader

@@ -1,4 +1,3 @@
-import pytest
 from src.factories import GoogleStorageFactory
 from src.products.google.gcs_uploader import GCSUploader
 from src.products.google.gcs_downloader import GCSDownloader
